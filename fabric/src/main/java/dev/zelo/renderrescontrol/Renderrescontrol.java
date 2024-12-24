@@ -1,18 +1,16 @@
 package dev.zelo.renderrescontrol;
 
-import net.fabricmc.api.ModInitializer;
+import dev.zelo.renderrescontrol.config.RenderrescontrolConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
+import net.fabricmc.api.ClientModInitializer;
 
-public class Renderrescontrol implements ModInitializer {
+public class Renderrescontrol implements ClientModInitializer {
+    public static final ConfigHolder<RenderrescontrolConfig> CONFIG = RenderrescontrolConfig.init();
 
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {}
 
-        // This method is invoked by the Fabric mod loader when it is ready
-        // to load your mod. You can access Fabric and Common code in this
-        // project.
-
-        // Use Fabric to bootstrap the Common mod.
-        Constants.LOG.info("Hello Fabric world!");
-        CommonClass.init();
+    public static RenderrescontrolConfig getConfig() {
+        return CONFIG.getConfig();
     }
 }

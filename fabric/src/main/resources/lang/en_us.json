@@ -1,0 +1,6 @@
+{
+  "renderrescontrol.name": "RenderScale",
+  "text.autoconfig.renderrescontrol.title": "RenderScale Options",
+  "text.autoconfig.renderrescontrol.option.scale": "Scale factor",
+  "text.autoconfig.renderrescontrol.option.nearest": "Enable nearest neighbor scaling"
+}

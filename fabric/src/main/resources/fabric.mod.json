@@ -15,8 +15,11 @@
   "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "client": [
       "dev.zelo.renderrescontrol.Renderrescontrol"
+    ],
+    "modmenu": [
+      "dev.zelo.renderrescontrol.compat.ModMenuApiImpl"
     ]
   },
   "mixins": [
@@ -30,6 +33,6 @@
     "java": ">=${java_version}"
   },
   "suggests": {
-    "another-mod": "*"
+    "modmenu": "*"
   }
 }
