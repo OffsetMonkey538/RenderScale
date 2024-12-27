@@ -1,5 +1,6 @@
 package dev.zelo.renderrescontrol.config;
 
+import dev.zelo.renderrescontrol.Renderrescontrol;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -19,6 +20,12 @@ public class RenderrescontrolConfig implements ConfigData {
         // Listen for when the server is reloading (i.e. /reload), and reload the config
         ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((s, m) ->
                 AutoConfig.getConfigHolder(RenderrescontrolConfig.class).load());
+
+        // Change resolution upon save!
+        holder.registerSaveListener((manager, data) -> {
+            Renderrescontrol.getInstance().onResolutionChanged();
+            return null;
+        });
 
         return holder;
     }

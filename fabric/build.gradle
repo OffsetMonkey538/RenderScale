@@ -31,6 +31,7 @@ loom {
     if (aw.exists()) {
         accessWidenerPath.set(aw)
     }
+    accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
     }
