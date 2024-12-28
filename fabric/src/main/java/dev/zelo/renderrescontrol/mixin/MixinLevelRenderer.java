@@ -11,16 +11,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public abstract class MixinLevelRenderer {
-    @Shadow private RenderTarget entityTarget;
+    @Shadow private RenderTarget entityOutlineTarget;
 
-    @Inject(method = "initOutline", at = @At("RETURN"))
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getMainRenderTarget()Lcom/mojang/blaze3d/pipeline/RenderTarget;"))
     private void onLoadEntityOutlineShader(CallbackInfo ci) {
         Renderrescontrol.getInstance().resizeMinecraftRenderTargetSize();
     }
 
     @Inject(method = "resize", at = @At("RETURN"))
     private void onOnResized(CallbackInfo ci) {
-        if (entityTarget == null) return;
+        if (entityOutlineTarget == null) return;
         Renderrescontrol.getInstance().resizeMinecraftRenderTargetSize();
     }
 }

@@ -9,7 +9,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -64,7 +63,7 @@ public class Renderrescontrol implements ModInitializer {
             minecraftRenderTargets = new HashSet<>();
         }
 
-        minecraftRenderTargets.add(client.levelRenderer.entityTarget());
+        minecraftRenderTargets.add(client.levelRenderer.entityOutlineTarget());
         minecraftRenderTargets.add(client.levelRenderer.getTranslucentTarget());
         minecraftRenderTargets.add(client.levelRenderer.getItemEntityTarget());
         minecraftRenderTargets.add(client.levelRenderer.getParticlesTarget());
@@ -80,7 +79,6 @@ public class Renderrescontrol implements ModInitializer {
                 getWindow().getScreenWidth(), getWindow().getScreenHeight(),
                 getWindow().getGuiScaledWidth(), getWindow().getGuiScaledHeight());
 
-
         updateRenderTargetSize();
 
     }
@@ -89,7 +87,7 @@ public class Renderrescontrol implements ModInitializer {
         if (renderTarget == null) return;
 
         resize(renderTarget);
-        resize(client.levelRenderer.entityTarget());
+        resize(client.levelRenderer.entityOutlineTarget());
         resizeMinecraftRenderTargetSize();
     }
 
@@ -118,7 +116,7 @@ public class Renderrescontrol implements ModInitializer {
             setClientRenderTarget(clientRenderTarget);
             client.getMainRenderTarget().bindWrite(true);
 
-            renderTarget.blitToScreen(window.getWidth(), window.getHeight());
+            renderTarget.blitAndBlendToScreen(window.getWidth(), window.getHeight());
         }
     }
 
@@ -141,7 +139,7 @@ public class Renderrescontrol implements ModInitializer {
         shouldScale = true;
 
         Window window = client.getWindow();
-        renderTarget.resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
+        renderTarget.resize(window.getWidth(), window.getHeight());
 
         shouldScale = prev;
     }
