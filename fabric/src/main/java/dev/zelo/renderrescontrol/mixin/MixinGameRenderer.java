@@ -18,6 +18,7 @@ public abstract class MixinGameRenderer {
     private int waitFrameCounter = 0;
 
     @Inject(at = @At("HEAD"), method = "renderLevel")
+    // TODO: Do we need this?
     private void onRenderWorldBegin(CallbackInfo callbackInfo) {
         if (!Renderrescontrol.getInstance().hasRun) {
             Renderrescontrol.getInstance().hasRun = true;
