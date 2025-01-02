@@ -16,17 +16,17 @@
   "environment": "client",
   "entrypoints": {
     "main": [
-      "dev.zelo.renderrescontrol.Renderrescontrol"
+      "dev.zelo.renderscale.RenderScale"
     ],
     "modmenu": [
-      "dev.zelo.renderrescontrol.compat.ModMenuApiImpl"
+      "dev.zelo.renderscale.compat.ModMenuApiImpl"
     ]
   },
   "mixins": [
     "${mod_id}.mixins.json",
     "${mod_id}.fabric.mixins.json"
   ],
-  "accessWidener": "renderrescontrol.accesswidener",
+  "accessWidener": "renderscale.accesswidener",
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
