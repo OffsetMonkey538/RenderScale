@@ -4,12 +4,7 @@
   "package": "dev.zelo.renderscale.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
-  "client": [
-    "MixinGameRenderer",
-    "MixinWindow",
-    "MixinLevelRenderer",
-    "MixinRenderTarget"
-  ],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1

@@ -1,7 +1,7 @@
 package dev.zelo.renderscale.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import dev.zelo.renderscale.RenderScale;
+import dev.zelo.renderscale.CommonClass;
 import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,12 +15,12 @@ public abstract class MixinLevelRenderer {
 
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getMainRenderTarget()Lcom/mojang/blaze3d/pipeline/RenderTarget;"))
     private void onLoadEntityOutlineShader(CallbackInfo ci) {
-        RenderScale.getInstance().resizeMinecraftRenderTargetSize();
+        CommonClass.getInstance().resizeMinecraftRenderTargetSize();
     }
 
     @Inject(method = "resize", at = @At("RETURN"))
     private void onOnResized(CallbackInfo ci) {
         if (entityOutlineTarget == null) return;
-        RenderScale.getInstance().resizeMinecraftRenderTargetSize();
+        CommonClass.getInstance().resizeMinecraftRenderTargetSize();
     }
 }

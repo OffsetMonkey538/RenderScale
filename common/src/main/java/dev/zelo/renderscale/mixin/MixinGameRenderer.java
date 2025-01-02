@@ -1,6 +1,6 @@
 package dev.zelo.renderscale.mixin;
 
-import dev.zelo.renderscale.RenderScale;
+import dev.zelo.renderscale.CommonClass;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,8 +19,8 @@ public abstract class MixinGameRenderer {
     @Inject(at = @At("HEAD"), method = "renderLevel")
     // TODO: Do we need this?
     private void onRenderWorldBegin(CallbackInfo callbackInfo) {
-        if (!RenderScale.getInstance().hasRun) {
-            RenderScale.getInstance().hasRun = true;
+        if (!CommonClass.getInstance().hasRun) {
+            CommonClass.getInstance().hasRun = true;
             waitingForResolutionChange = true;
         }
 
@@ -28,15 +28,15 @@ public abstract class MixinGameRenderer {
             waitFrameCounter++;
             if (waitFrameCounter >= 5) {
                 waitingForResolutionChange = false;
-                RenderScale.getInstance().onResolutionChanged();
+                CommonClass.getInstance().onResolutionChanged();
             }
         }
 
-        RenderScale.getInstance().setShouldScale(true);
+        CommonClass.getInstance().setShouldScale(true);
     }
 
     @Inject(at = @At("RETURN"), method = "renderLevel")
     private void onRenderWorldEnd(CallbackInfo callbackInfo) {
-        RenderScale.getInstance().setShouldScale(false);
+        CommonClass.getInstance().setShouldScale(false);
     }
 }
