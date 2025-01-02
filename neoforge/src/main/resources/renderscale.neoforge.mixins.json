@@ -5,7 +5,10 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-    "MixinTitleScreen"
+    "MixinGameRenderer",
+    "MixinWindow",
+    "MixinLevelRenderer",
+    "MixinRenderTarget"
   ],
   "server": [],
   "injectors": {
