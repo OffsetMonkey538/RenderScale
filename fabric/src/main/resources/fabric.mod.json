@@ -5,17 +5,23 @@
   "name": "${mod_name}",
   "description": "${description}",
   "authors": [
-    "${mod_author}"
+    {
+      "name": "${mod_author}",
+      "contact": {
+        "homepage": "https://zelo.dev/"
+      }
+    }
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Zolo101/RenderScale",
+    "sources": "https://github.com/Zolo101/RenderScale",
+    "issues": "https://github.com/Zolo101/RenderScale/issues"
   },
   "license": "${license}",
   "icon": "${mod_id}.png",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "dev.zelo.renderscale.RenderScale"
     ],
     "modmenu": [
@@ -31,9 +37,8 @@
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "java": ">=${java_version}"
-  },
-  "suggests": {
-    "modmenu": "*"
+    "java": ">=${java_version}",
+    "modmenu": "*",
+    "cloth-config": "*"
   }
 }

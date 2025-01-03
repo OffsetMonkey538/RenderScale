@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(RenderTarget.class)
 public abstract class MixinRenderTarget {
-    @Redirect(method = "setFilterMode(IZ)V", remap = false, at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_texParameter(III)V"))
+    @Redirect(method = "setFilterMode(IZ)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_texParameter(III)V"))
     private void onSetTexFilter(int target, int pname, int param) {
         GlStateManager._texParameter(target, pname, CommonClass.getConfig().nearest ? GL11.GL_NEAREST : GL11.GL_LINEAR);
     }
