@@ -10,7 +10,7 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 @Config(name = "renderscale")
 public class RenderScaleConfig implements ConfigData {
     public float scale = 1.0f;
-    public boolean nearest = true;
+    public boolean forceLinear = false;
 
     public static ConfigHolder<RenderScaleConfig> init() {
         // Register config
@@ -23,5 +23,10 @@ public class RenderScaleConfig implements ConfigData {
         });
 
         return holder;
+    }
+
+    // yes -> linear, no -> nearest
+    public boolean getFilter() {
+        return forceLinear || scale > 1.0;
     }
 }
