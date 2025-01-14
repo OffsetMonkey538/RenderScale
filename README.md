@@ -6,6 +6,8 @@ This is a fork of [ResolutionControl++](https://github.com/ModLabsCC/Resolution-
 
 ![Comparison of FPS for each common render scale](comparison2.webp)
 
+![Comparison of anti-aliasing for 1x and 2x render scales](ssma2.png)
+
 Check out [Fabrishot](https://modrinth.com/mod/fabrishot) if you also want the large screenshot feature that was in ResolutionControl.
 
 ---
@@ -14,21 +16,16 @@ Check out [Fabrishot](https://modrinth.com/mod/fabrishot) if you also want the l
 
 Use the mod config to control the render scale multiplier. You can choose to increase for better antialiasing, or decrease for improved performance. This is heavily recommended for laptops with retina displays!
 
-Additionally, you can set the scaling algorithm used.
-Linear is good for antialiasing & scaling higher than native, while nearest neighbor keeps it pixelated.
+You can also force "linear" scale algorithm (similar to FXAA) in lower render scales if you want, but this may make shaders blurry, as they usually have their own antialiasing.
 
-If you're using shaders, it may be a good idea to stick to nearest as to not conflict with the shaders' own antialiasing, which could make things blurry.
+There are no plans to support DLSS or FSR 2.0+. I'm looking into potential FSR 1.0 support, but I'm not sure yet.
 
-There are no plans to support DLSS, FSR 2.0+, etc. I'm looking into potential FSR 1.0 support, but I'm not sure yet.
+There are plans for Dynamic Resolution!
 
 ---
 
 # Compatibility
 
-RenderScale **does not work with Fabulous Graphics**!
+Should be compatible with any mod, including Sodium, Iris, etc. 
 
-**Sodium** - Compatible
-
-**Canvas Renderer** - No idea
-
-**OptiFine** - No idea, but OptiFine has this as "Render Quality" in the Shaders tab. 
+If there's any bugs with the shaders, before reporting to the shader developer, please disable this mod and check again to make sure it's not us! Otherwise, please report it [here](https://github.com/Zolo101/RenderScale/issues). 
