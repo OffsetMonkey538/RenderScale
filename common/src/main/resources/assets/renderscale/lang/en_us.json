@@ -2,5 +2,5 @@
   "renderscale.name": "RenderScale",
   "text.autoconfig.renderscale.title": "RenderScale Options",
   "text.autoconfig.renderscale.option.scale": "Scale factor",
-  "text.autoconfig.renderscale.option.nearest": "Enable nearest neighbor scaling"
+  "text.autoconfig.renderscale.option.forceLinear": "Force linear scaling"
 }

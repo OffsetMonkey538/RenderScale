@@ -51,11 +51,6 @@ public class CommonClass {
         }
 
         minecraftRenderTargets.add(client.levelRenderer.entityOutlineTarget());
-//        minecraftRenderTargets.add(client.levelRenderer.getTranslucentTarget());
-//        minecraftRenderTargets.add(client.levelRenderer.getItemEntityTarget());
-//        minecraftRenderTargets.add(client.levelRenderer.getParticlesTarget());
-//        minecraftRenderTargets.add(client.levelRenderer.getWeatherTarget());
-//        minecraftRenderTargets.add(client.levelRenderer.getCloudsTarget());
         minecraftRenderTargets.remove(null);
     }
 
@@ -73,6 +68,7 @@ public class CommonClass {
         if (renderTarget == null) return;
 
         resize(renderTarget);
+        resize(client.levelRenderer.entityOutlineTarget());
         resizeMinecraftRenderTargetSize();
     }
 
