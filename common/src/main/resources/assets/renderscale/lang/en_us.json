@@ -2,5 +2,7 @@
   "renderscale.name": "RenderScale",
   "text.autoconfig.renderscale.title": "RenderScale Options",
   "text.autoconfig.renderscale.option.scale": "Scale factor",
-  "text.autoconfig.renderscale.option.forceLinear": "Force linear scaling"
+  "text.autoconfig.renderscale.option.forceLinear": "Force linear scaling",
+  "key.renderscale.category": "RenderScale",
+  "key.renderscale.options": "Open Config"
 }
