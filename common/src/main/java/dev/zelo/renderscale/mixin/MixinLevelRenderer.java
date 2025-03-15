@@ -12,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinLevelRenderer {
     @Shadow private RenderTarget entityTarget;
 
-    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 16))
+//    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", ordinal = 16))
+//    @Inject(method = "doEntityOutline", at = @At(value = "RETURN"))
+    @Inject(method = "initOutline", at = @At(value = "RETURN"))
     private void a(CallbackInfo ci) {
         CommonClass.getInstance().resizeMinecraftRenderTargetSize();
     }

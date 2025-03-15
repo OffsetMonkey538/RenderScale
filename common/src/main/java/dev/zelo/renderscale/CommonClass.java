@@ -2,6 +2,7 @@ package dev.zelo.renderscale;
 
 import com.mojang.blaze3d.pipeline.MainTarget;
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import dev.zelo.renderscale.config.RenderScaleConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -104,7 +105,8 @@ public class CommonClass {
             setClientRenderTarget(clientRenderTarget);
             client.getMainRenderTarget().bindWrite(true);
 
-            renderTarget.blitToScreen(window.getWidth(), window.getHeight());
+            // TODO: Support fabulous graphics. Right now disableBlend = true shows the other passes but messes up the main target
+            renderTarget.blitToScreen(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
         }
     }
 
@@ -133,17 +135,16 @@ public class CommonClass {
     }
 
     public void resize(@Nullable PostChain postChain) {
-        if (renderTarget == null) return;
+        if (postChain == null) return;
 
         boolean prev = shouldScale;
         shouldScale = true;
 
         Window window = client.getWindow();
-        float s = getConfig().scale;
-        float inverseScale = 1 / s;
 
-        postChain.fullSizedTargets.getFirst().resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
-        postChain.shaderOrthoMatrix = new Matrix4f().setOrtho(0.0F, (float)postChain.screenTarget.width * inverseScale, 0.0F, (float)postChain.screenTarget.height * inverseScale, 0.1F, 1000.0F);
+        for (RenderTarget target : postChain.fullSizedTargets) {
+            target.resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
+        }
 
         shouldScale = prev;
     }
