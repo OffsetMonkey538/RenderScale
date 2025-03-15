@@ -6,7 +6,10 @@ import com.mojang.blaze3d.platform.Window;
 import dev.zelo.renderscale.config.RenderScaleConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.PostPass;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +27,9 @@ public class CommonClass {
     private RenderTarget clientRenderTarget;
 
     private Set<RenderTarget> minecraftRenderTargets;
+
+//    @Nullable
+//    private Post renderTarget;
 
     private static CommonClass instance;
     private boolean shouldScale = false;
@@ -50,7 +56,8 @@ public class CommonClass {
             minecraftRenderTargets = new HashSet<>();
         }
 
-        minecraftRenderTargets.add(client.levelRenderer.entityOutlineTarget());
+//        client.levelRenderer.initOutline();
+        minecraftRenderTargets.add(client.levelRenderer.entityTarget());
         minecraftRenderTargets.remove(null);
     }
 
@@ -61,20 +68,26 @@ public class CommonClass {
                 getWindow().getScreenWidth(), getWindow().getScreenHeight(),
                 getWindow().getGuiScaledWidth(), getWindow().getGuiScaledHeight());
 
+        Window window = client.getWindow();
         updateRenderTargetSize();
+
+        // TODO: idk why but we gotta do this to make the glow stay...
+        client.levelRenderer.resize(window.getGuiScaledWidth(), window.getGuiScaledHeight());
+//        client.resizeDisplay();
     }
 
     public void updateRenderTargetSize() {
         if (renderTarget == null) return;
 
         resize(renderTarget);
-        resize(client.levelRenderer.entityOutlineTarget());
+        resize(client.levelRenderer.entityTarget());
         resizeMinecraftRenderTargetSize();
     }
 
     public void resizeMinecraftRenderTargetSize() {
         initMinecraftRenderTargets();
         minecraftRenderTargets.forEach(this::resize);
+        this.resize(client.levelRenderer.entityEffect);
     }
 
     public void setShouldScale(boolean shouldScale) {
@@ -97,7 +110,7 @@ public class CommonClass {
             setClientRenderTarget(clientRenderTarget);
             client.getMainRenderTarget().bindWrite(true);
 
-            renderTarget.blitAndBlendToScreen(window.getWidth(), window.getHeight());
+            renderTarget.blitToScreen(window.getWidth(), window.getHeight());
         }
     }
 
@@ -120,7 +133,38 @@ public class CommonClass {
         shouldScale = true;
 
         Window window = client.getWindow();
-        renderTarget.resize(window.getWidth(), window.getHeight());
+        renderTarget.resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
+
+        shouldScale = prev;
+    }
+
+    public void resize(@Nullable PostChain postChain) {
+        if (renderTarget == null) return;
+
+        boolean prev = shouldScale;
+        shouldScale = true;
+
+        Window window = client.getWindow();
+        // The problem is this resizes the rendering, not the scaling after the rendering
+        float s = getConfig().scale;
+        float inverseScale = 1 / s;
+
+
+        // 0.5 -> 1 / 0.5 => 2
+//        float inverseScale = 4;
+
+//        postChain.resize((int) (window.getWidth() / getConfig().scale), (int) (window.getHeight() / getConfig().scale));
+//        postChain.resize((int) (window.getWidth()), (int) (window.getHeight()));
+//        postChain.screenTarget.resize((int) (window.getWidth()), (int) (window.getHeight()), Minecraft.ON_OSX);
+//        postChain.fullSizedTargets.get(0).resize((int) (window.getWidth() / (s * s)), (int) (window.getHeight() / (s * s)),  Minecraft.ON_OSX);
+//        postChain.fullSizedTargets.get(0).blitToScreen((int) (window.getWidth() * s * s), (int) (window.getHeight() * s * s),  Minecraft.ON_OSX);
+//        postChain.fullSizedTargets.getFirst().resize((int) (window.getWidth() / 2), (int) (window.getHeight() / 2), Minecraft.ON_OSX);
+//        for (RenderTarget rendertarget : postChain.fullSizedTargets) {
+//        }
+//        Constants.LOG.info("BRUH MOMENT");
+        postChain.fullSizedTargets.getFirst().resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
+//        postChain.shaderOrthoMatrix.scale(inverseScale, inverseScale, 1.0F);
+        postChain.shaderOrthoMatrix = new Matrix4f().setOrtho(0.0F, (float)postChain.screenTarget.width * inverseScale, 0.0F, (float)postChain.screenTarget.height * inverseScale, 0.1F, 1000.0F);
 
         shouldScale = prev;
     }

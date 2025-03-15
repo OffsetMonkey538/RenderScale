@@ -9,7 +9,8 @@
     "MixinGameRenderer",
     "MixinWindow",
     "MixinLevelRenderer",
-    "MixinRenderTarget"
+    "MixinRenderTarget",
+    "MixinPostChain"
   ],
   "server": [],
   "injectors": {

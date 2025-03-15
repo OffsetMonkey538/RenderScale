@@ -2,3 +2,11 @@ accessWidener v2 named
 
 accessible field net/minecraft/client/Minecraft mainRenderTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
 mutable field net/minecraft/client/Minecraft mainRenderTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+accessible field net/minecraft/client/renderer/LevelRenderer entityEffect Lnet/minecraft/client/renderer/PostChain;
+
+accessible field net/minecraft/client/renderer/PostChain screenTarget Lcom/mojang/blaze3d/pipeline/RenderTarget;
+accessible field net/minecraft/client/renderer/PostChain customRenderTargets Ljava/util/Map;
+accessible field net/minecraft/client/renderer/PostChain fullSizedTargets Ljava/util/List;
+
+accessible field net/minecraft/client/renderer/PostChain shaderOrthoMatrix Lorg/joml/Matrix4f;
+accessible field net/minecraft/client/renderer/PostChain passes Ljava/util/List;
