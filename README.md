@@ -38,7 +38,7 @@ If there's any bugs with the shaders, before reporting to the shader developer, 
 |-----------------|--------|----------|-------|
 | 1.21.4          | ✅      | ✅        | 🚫    |
 | 1.21.2 - 1.21.3 | 🚫 [1] | 🚫       | 🚫    |
-| 1.21.0 - 1.21.1 | ✅      | ✅        | 🚫    |
+| 1.21.0 - 1.21.1 | ✅ [3]  | ✅ [3]    | 🚫    |
 | 1.20.4 - 1.20.6 | 🚫 [1] | 🚫       | 🚫    |
 | 1.20.2 - 1.20.4 | 🚫 [2] | 🚫       | 🚫    |
 | 1.20.1          | 🚫 [2] | 🚫       | ✅     |
@@ -46,3 +46,5 @@ If there's any bugs with the shaders, before reporting to the shader developer, 
 [1] Available on [ResolutionControl++](https://modrinth.com/mod/resolution-control-plus-plus)
 
 [2] Available on [ResolutionControl+](https://modrinth.com/mod/resolution-control-plus)
+
+[3] Currently does not support Fabulous graphics
