@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
 @Mixin(Window.class)
 public abstract class MixinWindow {
     @Inject(method = "getWidth", at = @At("RETURN"), cancellable = true)

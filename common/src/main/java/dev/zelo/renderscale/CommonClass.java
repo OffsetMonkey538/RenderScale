@@ -7,7 +7,6 @@ import dev.zelo.renderscale.config.RenderScaleConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
-import net.minecraft.client.renderer.PostPass;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
@@ -27,9 +26,6 @@ public class CommonClass {
     private RenderTarget clientRenderTarget;
 
     private Set<RenderTarget> minecraftRenderTargets;
-
-//    @Nullable
-//    private Post renderTarget;
 
     private static CommonClass instance;
     private boolean shouldScale = false;
@@ -56,7 +52,6 @@ public class CommonClass {
             minecraftRenderTargets = new HashSet<>();
         }
 
-//        client.levelRenderer.initOutline();
         minecraftRenderTargets.add(client.levelRenderer.entityTarget());
         minecraftRenderTargets.remove(null);
     }
@@ -71,9 +66,8 @@ public class CommonClass {
         Window window = client.getWindow();
         updateRenderTargetSize();
 
-        // TODO: idk why but we gotta do this to make the glow stay...
+        // TODO: idk why but we gotta do this to make the glow stay... investigate more...
         client.levelRenderer.resize(window.getGuiScaledWidth(), window.getGuiScaledHeight());
-//        client.resizeDisplay();
     }
 
     public void updateRenderTargetSize() {
@@ -145,25 +139,10 @@ public class CommonClass {
         shouldScale = true;
 
         Window window = client.getWindow();
-        // The problem is this resizes the rendering, not the scaling after the rendering
         float s = getConfig().scale;
         float inverseScale = 1 / s;
 
-
-        // 0.5 -> 1 / 0.5 => 2
-//        float inverseScale = 4;
-
-//        postChain.resize((int) (window.getWidth() / getConfig().scale), (int) (window.getHeight() / getConfig().scale));
-//        postChain.resize((int) (window.getWidth()), (int) (window.getHeight()));
-//        postChain.screenTarget.resize((int) (window.getWidth()), (int) (window.getHeight()), Minecraft.ON_OSX);
-//        postChain.fullSizedTargets.get(0).resize((int) (window.getWidth() / (s * s)), (int) (window.getHeight() / (s * s)),  Minecraft.ON_OSX);
-//        postChain.fullSizedTargets.get(0).blitToScreen((int) (window.getWidth() * s * s), (int) (window.getHeight() * s * s),  Minecraft.ON_OSX);
-//        postChain.fullSizedTargets.getFirst().resize((int) (window.getWidth() / 2), (int) (window.getHeight() / 2), Minecraft.ON_OSX);
-//        for (RenderTarget rendertarget : postChain.fullSizedTargets) {
-//        }
-//        Constants.LOG.info("BRUH MOMENT");
         postChain.fullSizedTargets.getFirst().resize(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
-//        postChain.shaderOrthoMatrix.scale(inverseScale, inverseScale, 1.0F);
         postChain.shaderOrthoMatrix = new Matrix4f().setOrtho(0.0F, (float)postChain.screenTarget.width * inverseScale, 0.0F, (float)postChain.screenTarget.height * inverseScale, 0.1F, 1000.0F);
 
         shouldScale = prev;
