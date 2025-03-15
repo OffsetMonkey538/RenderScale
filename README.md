@@ -29,3 +29,20 @@ There are plans for Dynamic Resolution!
 Should be compatible with any mod, including Sodium, Iris, etc. 
 
 If there's any bugs with the shaders, before reporting to the shader developer, please disable this mod and check again to make sure it's not us! Otherwise, please report it [here](https://github.com/Zolo101/RenderScale/issues). 
+
+---
+
+# Supported Versions
+
+| Minecraft       | Fabric | NeoForge | Forge |
+|-----------------|--------|----------|-------|
+| 1.21.4          | ✅      | ✅        | 🚫    |
+| 1.21.2 - 1.21.3 | 🚫 [1] | 🚫       | 🚫    |
+| 1.21.0 - 1.21.1 | ✅      | ✅        | 🚫    |
+| 1.20.4 - 1.20.6 | 🚫 [1] | 🚫       | 🚫    |
+| 1.20.2 - 1.20.4 | 🚫 [2] | 🚫       | 🚫    |
+| 1.20.1          | 🚫 [2] | 🚫       | ✅     |
+
+[1] Available on [ResolutionControl++](https://modrinth.com/mod/resolution-control-plus-plus)
+
+[2] Available on [ResolutionControl+](https://modrinth.com/mod/resolution-control-plus)
