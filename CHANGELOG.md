@@ -1,3 +1,7 @@
+# 1.2
+## Changes
+- Keybind (O) to change settings (#7)
+
 # 1.1
 ## Changes
 - Automatically use linear scaling when the render scale is more than 1.
