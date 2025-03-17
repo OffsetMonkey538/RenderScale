@@ -5,17 +5,20 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
@@ -31,7 +34,6 @@ public class RenderScale {
 
         NeoForge.EVENT_BUS.addListener(this::onWorldRenderStart);
         NeoForge.EVENT_BUS.addListener(this::onClientTickEnd);
-        NeoForge.EVENT_BUS.addListener(this::onDatapackReload);
     }
 
     public static Screen getConfigScreen(Screen parent) {
@@ -55,8 +57,17 @@ public class RenderScale {
         }
     }
 
-    public void onDatapackReload(AddReloadListenerEvent event) {
+    public static void onDatapackReload() {
         AutoConfig.getConfigHolder(RenderScaleConfig.class).load();
+    }
+
+    @EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public class EventHandler {
+        @SubscribeEvent
+        public static void registerReloadManager(AddClientReloadListenersEvent event) {
+            event.addListener(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "load_config"),
+                    (ResourceManagerReloadListener) c -> RenderScale.onDatapackReload());
+        }
     }
 
     @SubscribeEvent
