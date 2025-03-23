@@ -7,9 +7,10 @@
   "mixins": [],
   "client": [
     "MixinGameRenderer",
-    "MixinWindow",
+    "MixinGlCommandEncoder",
     "MixinLevelRenderer",
-    "MixinRenderTarget"
+    "MixinRenderTarget",
+    "MixinWindow"
   ],
   "server": [],
   "injectors": {

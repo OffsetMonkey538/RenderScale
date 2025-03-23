@@ -5,6 +5,7 @@ import com.mojang.blaze3d.framegraph.FramePass;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.zelo.renderscale.CommonClass;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LevelTargetBundle;
 import org.joml.Vector4f;
@@ -18,37 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelRenderer.class)
 public abstract class MixinLevelRenderer {
     @Shadow private RenderTarget entityOutlineTarget;
-    @Shadow @Final private LevelTargetBundle targets;
 
-    @Unique
-    private FrameGraphBuilder multiLoader_Template$frameGraphBuilder;
-
-    @Unique
-    private Vector4f multiLoader_Template$Vector4f;
-
-    // Fix for the entity outline shader
-    // method is fabric
-    // lambda is neoforge
-    @Inject(method = {"method_62215", "lambda$addSkyPass$12"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch()V"))
-    private void onLoadEntityOutlineShader(CallbackInfo ci) {
-        FramePass framePass = multiLoader_Template$frameGraphBuilder.addPass("clear");
-        framePass.executes(() -> {
-            RenderSystem.clearColor(multiLoader_Template$Vector4f.x, multiLoader_Template$Vector4f.y, multiLoader_Template$Vector4f.z, 0.0F);
-            RenderSystem.clear(16640);
-        });
-        CommonClass.getInstance().resizeMinecraftRenderTargetSize();
-    }
-
-    @ModifyVariable(method = "renderLevel", at = @At(value = "STORE"))
-    private FrameGraphBuilder a(FrameGraphBuilder instance) {
-        multiLoader_Template$frameGraphBuilder = instance;
-        return instance;
-    }
-
-    @ModifyVariable(method = "renderLevel", at = @At(value = "STORE"))
-    private Vector4f b(Vector4f value) {
-        multiLoader_Template$Vector4f = value;
-        return value;
+    // The NEW and IMPROVED fix for the entity outline shader!
+    // TODO: Un-hardcode this for release
+    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getMainRenderTarget()Lcom/mojang/blaze3d/pipeline/RenderTarget;"))
+    private RenderTarget redirectGetMainRenderTarget(Minecraft instance) {
+        entityOutlineTarget.width = instance.getWindow().getWidth() / 2;
+        entityOutlineTarget.height = instance.getWindow().getHeight() / 2;
+        return entityOutlineTarget;
     }
 
     @Inject(method = "resize", at = @At("RETURN"))

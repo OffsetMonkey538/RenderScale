@@ -3,7 +3,11 @@ package dev.zelo.renderscale;
 import com.mojang.blaze3d.pipeline.MainTarget;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.GpuTexture;
+import com.mojang.blaze3d.textures.TextureFormat;
 import dev.zelo.renderscale.config.RenderScaleConfig;
+import dev.zelo.renderscale.accessors.GICommandEncoderThing;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +26,8 @@ public class CommonClass {
 
     @Nullable
     private RenderTarget clientRenderTarget;
+
+    private GpuTexture x;
 
     private Set<RenderTarget> minecraftRenderTargets;
 
@@ -78,31 +84,58 @@ public class CommonClass {
     }
 
     public void setShouldScale(boolean shouldScale) {
-        if (this.shouldScale == shouldScale) return;
-
+//        if (this.shouldScale == shouldScale) return;
+//
         Window window = client.getWindow();
-        if (renderTarget == null) {
-            this.shouldScale = true;
-            renderTarget = new MainTarget(window.getWidth(), window.getHeight());
-        }
+//        if (renderTarget == null) {
+//            this.shouldScale = true;
+//            renderTarget = new MainTarget(window.getWidth(), window.getHeight());
+//        }
+//
+//        this.shouldScale = shouldScale;
 
-        this.shouldScale = shouldScale;
+        int width = window.getWidth();
+        int height = window.getHeight();
+//        double scale = getConfig().scale;
+        double scale = 0.5f;
+        RenderTarget rt = client.getMainRenderTarget();
 
         if (shouldScale) {
-            clientRenderTarget = client.getMainRenderTarget();
+            // this will be 0.5x
 
-            setClientRenderTarget(renderTarget);
-            renderTarget.bindWrite(true);
+            // the aim is:
+            // 1. resize window down after gui (shouldScale=true), save this to X
+            // 2. game draws at resized resolution as normal
+            // 3. afterwards, resize and copy x back to render target
+
+            rt.resize((int) (width * scale), (int) (height * scale));
+            x = RenderSystem.getDevice().createTexture("RenderScale Swap", TextureFormat.RGBA8, (int) (width * scale), (int) (height * scale), 1);
         } else {
-            setClientRenderTarget(clientRenderTarget);
-            client.getMainRenderTarget().bindWrite(true);
+            RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(
+                    rt.getColorTexture(), x,
+                    0, 0, 0, 0, 0,
+                    (int) (width * scale), (int) (height * scale)
+            );
 
-            renderTarget.blitAndBlendToScreen(window.getWidth(), window.getHeight());
+            rt.resize(width, height);
+
+            ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).renderScale$copyAndResizeTexture(
+                    x, rt.getColorTexture(),
+                    0, 0, 0, 0, 0,
+                    (int) (width * scale), (int) (height * scale),
+                    width, height
+            );
+
+            x.close();
+            // show result
+//            rt.blitToScreen();
         }
     }
 
     public double getCurrentScaleFactor() {
-        return shouldScale ? getConfig().scale : 1;
+//        return shouldScale ? getConfig().scale : 1;
+        return shouldScale ? 0.5 : 1;
+//        return 0.5;
     }
 
     private Window getWindow() {
