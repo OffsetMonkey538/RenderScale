@@ -4,7 +4,6 @@ import com.jogamp.opengl.GL;
 import com.mojang.blaze3d.opengl.*;
 import com.mojang.blaze3d.textures.GpuTexture;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
-//import dev.zelo.renderscale.accessors.MixinDirectStateAccessThing;
 import org.lwjgl.opengl.ARBDirectStateAccess;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,11 +14,6 @@ import org.spongepowered.asm.mixin.Unique;
 public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
     @Shadow
     private boolean inRenderPass;
-
-//    @Shadow
-//    @Final
-//    private GlDevice device;
-
     @Shadow
     @Final
     private int readFbo;
@@ -48,33 +42,11 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
                 int sourceId = ((GlTexture) source).glId();
                 int destId = ((GlTexture) destination).glId();
 
-                // Bind source to read framebuffer
-//                this.device.directStateAccess().bindFrameBufferTextures(
-//                        this.readFbo, isDepth ? 0 : sourceId, isDepth ? sourceId : 0, 0, 0);
-
                 ARBDirectStateAccess.glNamedFramebufferTexture(this.readFbo, 36064, isDepth ? 0 : sourceId, 0);
                 ARBDirectStateAccess.glNamedFramebufferTexture(this.readFbo, 36096, isDepth ? sourceId : 0, 0);
-//                if (0 != 0) {
-//                    GlStateManager._glBindFramebuffer(m, i);
-//                }
-
-                // Bind destination to draw framebuffer
-//                this.device.directStateAccess().bindFrameBufferTextures(
-//                        this.drawFbo, isDepth ? 0 : destId, isDepth ? destId : 0, 0, 0);
 
                 ARBDirectStateAccess.glNamedFramebufferTexture(this.drawFbo, 36064, isDepth ? 0 : destId, 0);
                 ARBDirectStateAccess.glNamedFramebufferTexture(this.drawFbo, 36096, isDepth ? destId : 0, 0);
-//                if (m != 0) {
-//                    GlStateManager._glBindFramebuffer(m, i);
-//                }
-
-                // Blit with resize
-//                ((MixinDirectStateAccessThing)(Object) this.device.directStateAccess()).renderScale$blitFrameBuffers(
-//                this.device.directStateAccess().blitFrameBuffers(
-//                        sourceX, sourceY, sourceWidth, sourceHeight,
-//                        destX, destY, destWidth, destHeight,
-//                        isDepth ? 256 : 16384,
-//                        9729); // GL_LINEAR for smoother scaling
 
                 ARBDirectStateAccess.glBlitNamedFramebuffer(this.readFbo, this.drawFbo, sourceX, sourceY, sourceWidth, sourceHeight,
                         destX, destY, destWidth, destHeight,

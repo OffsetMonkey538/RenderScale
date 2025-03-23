@@ -9,7 +9,6 @@
     "MixinGameRenderer",
     "MixinGlCommandEncoder",
     "MixinLevelRenderer",
-    "MixinRenderTarget",
     "MixinWindow"
   ],
   "server": [],

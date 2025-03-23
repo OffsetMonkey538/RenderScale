@@ -21,12 +21,6 @@ import java.util.Set;
 // however it will be compatible with all supported mod loaders.
 public class CommonClass {
     private static final Minecraft client = Minecraft.getInstance();
-    @Nullable
-    private RenderTarget renderTarget;
-
-    @Nullable
-    private RenderTarget clientRenderTarget;
-
     private GpuTexture x;
 
     private Set<RenderTarget> minecraftRenderTargets;
@@ -71,9 +65,6 @@ public class CommonClass {
     }
 
     public void updateRenderTargetSize() {
-        if (renderTarget == null) return;
-
-        resize(renderTarget);
         resize(client.levelRenderer.entityOutlineTarget());
         resizeMinecraftRenderTargetSize();
     }
@@ -84,30 +75,16 @@ public class CommonClass {
     }
 
     public void setShouldScale(boolean shouldScale) {
-//        if (this.shouldScale == shouldScale) return;
-//
         Window window = client.getWindow();
-//        if (renderTarget == null) {
-//            this.shouldScale = true;
-//            renderTarget = new MainTarget(window.getWidth(), window.getHeight());
-//        }
-//
-//        this.shouldScale = shouldScale;
-
         int width = window.getWidth();
         int height = window.getHeight();
+
 //        double scale = getConfig().scale;
         double scale = 0.5f;
+
         RenderTarget rt = client.getMainRenderTarget();
 
         if (shouldScale) {
-            // this will be 0.5x
-
-            // the aim is:
-            // 1. resize window down after gui (shouldScale=true), save this to X
-            // 2. game draws at resized resolution as normal
-            // 3. afterwards, resize and copy x back to render target
-
             rt.resize((int) (width * scale), (int) (height * scale));
             x = RenderSystem.getDevice().createTexture("RenderScale Swap", TextureFormat.RGBA8, (int) (width * scale), (int) (height * scale), 1);
         } else {
@@ -127,8 +104,6 @@ public class CommonClass {
             );
 
             x.close();
-            // show result
-//            rt.blitToScreen();
         }
     }
 
@@ -140,10 +115,6 @@ public class CommonClass {
 
     private Window getWindow() {
         return client.getWindow();
-    }
-
-    private void setClientRenderTarget(RenderTarget renderTarget) {
-        client.mainRenderTarget = renderTarget;
     }
 
     public void resize(@Nullable RenderTarget renderTarget) {
