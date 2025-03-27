@@ -26,7 +26,10 @@ public abstract class MixinWindow {
 
     @Inject(method = "getGuiScale", at = @At("RETURN"), cancellable = true)
     private void c(CallbackInfoReturnable<Double> cir) {
-        cir.setReturnValue(cir.getReturnValueD() * (CommonClass.getInstance().getCurrentScaleFactor()));
+        // It's NeoForges' fault for this null check
+        if (CommonClass.getInstance() != null) {
+            cir.setReturnValue(cir.getReturnValueD() * (CommonClass.getInstance().getCurrentScaleFactor()));
+        }
     }
 
     @Inject(method = "onFramebufferResize", at = @At("RETURN"))
@@ -48,7 +51,7 @@ public abstract class MixinWindow {
             double scaleFactor = CommonClass.getInstance().getCurrentScaleFactor();
             return Math.max(Mth.ceil(((double) value) * scaleFactor), 1);
         } else {
-            return 0;
+            return value;
         }
     }
 }

@@ -13,6 +13,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -23,13 +24,10 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
 public class RenderScale {
-    private static final Minecraft client = Minecraft.getInstance();
-
     // TODO: Consider using Lazy? (https://docs.neoforged.net/docs/misc/keymappings/#checking-a-keymapping)
     private static final KeyMapping keyBinding = new KeyMapping("key.renderscale.options", GLFW.GLFW_KEY_O, "key.renderscale.category");
 
     public RenderScale(IEventBus eventBus, ModContainer modContainer) {
-        CommonClass.init();
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, (container, screen) -> RenderScale.getConfigScreen(screen));
 
         NeoForge.EVENT_BUS.addListener(this::onWorldRenderStart);
@@ -48,12 +46,12 @@ public class RenderScale {
     }
 
     public void onClientTickEnd(ClientTickEvent.Post event) {
-        if (client.level == null && CommonClass.getInstance().hasRun) {
+        if (Minecraft.getInstance().level == null && CommonClass.getInstance().hasRun) {
             CommonClass.getInstance().hasRun = false;
         }
 
         while (keyBinding.consumeClick()) {
-            client.setScreen(AutoConfig.getConfigScreen(RenderScaleConfig.class, client.screen).get());
+            Minecraft.getInstance().setScreen(AutoConfig.getConfigScreen(RenderScaleConfig.class, Minecraft.getInstance().screen).get());
         }
     }
 
@@ -67,6 +65,11 @@ public class RenderScale {
         public static void registerReloadManager(AddClientReloadListenersEvent event) {
             event.addListener(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "load_config"),
                     (ResourceManagerReloadListener) c -> RenderScale.onDatapackReload());
+        }
+
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            CommonClass.init(Minecraft.getInstance());
         }
     }
 

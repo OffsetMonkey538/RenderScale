@@ -14,11 +14,10 @@ public abstract class MixinLevelRenderer {
     @Shadow private RenderTarget entityOutlineTarget;
 
     // The NEW and IMPROVED fix for the entity outline shader!
-    // TODO: Un-hardcode this for release
     @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getMainRenderTarget()Lcom/mojang/blaze3d/pipeline/RenderTarget;"))
     private RenderTarget redirectGetMainRenderTarget(Minecraft instance) {
-        entityOutlineTarget.width = instance.getWindow().getWidth() / 2;
-        entityOutlineTarget.height = instance.getWindow().getHeight() / 2;
+        entityOutlineTarget.width = (int) (instance.getWindow().getWidth() * CommonClass.getConfig().scale);
+        entityOutlineTarget.height = (int) (instance.getWindow().getHeight() * CommonClass.getConfig().scale);
         return entityOutlineTarget;
     }
 

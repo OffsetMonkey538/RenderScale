@@ -3,6 +3,7 @@ package dev.zelo.renderscale.mixin;
 import com.jogamp.opengl.GL;
 import com.mojang.blaze3d.opengl.*;
 import com.mojang.blaze3d.textures.GpuTexture;
+import dev.zelo.renderscale.CommonClass;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
 import org.lwjgl.opengl.ARBDirectStateAccess;
 import org.spongepowered.asm.mixin.Final;
@@ -51,9 +52,7 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
                 ARBDirectStateAccess.glBlitNamedFramebuffer(this.readFbo, this.drawFbo, sourceX, sourceY, sourceWidth, sourceHeight,
                         destX, destY, destWidth, destHeight,
                         isDepth ? 256 : 16384,
-// TODO: CommonClass.getConfig().getFilter() ? GL.GL_LINEAR : GL.GL_NEAREST
-                        GL.GL_NEAREST);
-//                        GL.GL_LINEAR);
+                        CommonClass.getConfig().getFilter() ? GL.GL_LINEAR : GL.GL_NEAREST);
             }
         }
     }

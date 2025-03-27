@@ -20,7 +20,7 @@ import java.util.Set;
 // common compatible binaries. This means common code can not directly use loader specific concepts such as Forge events
 // however it will be compatible with all supported mod loaders.
 public class CommonClass {
-    private static final Minecraft client = Minecraft.getInstance();
+    private static Minecraft client = Minecraft.getInstance();
     private GpuTexture x;
 
     private Set<RenderTarget> minecraftRenderTargets;
@@ -31,8 +31,15 @@ public class CommonClass {
 
     public static final ConfigHolder<RenderScaleConfig> CONFIG = RenderScaleConfig.init();
 
+    // Fabric
     public static void init() {
         instance = new CommonClass();
+    }
+
+    // NeoForge made it so that the mod loads before Minecraft (but not fabric...), so this is needed to get the "actual" Minecraft instance
+    public static void init(Minecraft client) {
+        instance = new CommonClass();
+        CommonClass.client = client;
     }
 
     public static CommonClass getInstance() {
@@ -79,8 +86,7 @@ public class CommonClass {
         int width = window.getWidth();
         int height = window.getHeight();
 
-//        double scale = getConfig().scale;
-        double scale = 0.5f;
+        double scale = getConfig().scale;
 
         RenderTarget rt = client.getMainRenderTarget();
 
@@ -108,11 +114,10 @@ public class CommonClass {
     }
 
     public double getCurrentScaleFactor() {
-//        return shouldScale ? getConfig().scale : 1;
-        return shouldScale ? 0.5 : 1;
-//        return 0.5;
+        return shouldScale ? getConfig().scale : 1;
     }
 
+    @Nullable
     private Window getWindow() {
         return client.getWindow();
     }
