@@ -19,10 +19,10 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = parchment_minecraft
-        mappingsVersion = parchment_version
-    }
+//    parchment {
+//        minecraftVersion = parchment_minecraft
+//        mappingsVersion = parchment_version
+//    }
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
@@ -31,12 +31,12 @@ neoForge {
         client {
             client()
         }
-        data {
-            clientData()
-        }
-        server {
-            server()
-        }
+//        data {
+//            clientData()
+//        }
+//        server {
+//            server()
+//        }
     }
     mods {
         "${mod_id}" {
