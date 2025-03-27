@@ -2,7 +2,7 @@
 
 RenderScale allows you to change Minecraft's render resolution **separately** from the HUD elements.
 
-This is a fork of [ResolutionControl++](https://github.com/ModLabsCC/Resolution-Control) for 1.21.4, with added support for NeoForge.
+This is a fork of [ResolutionControl++](https://github.com/ModLabsCC/Resolution-Control), with added support for NeoForge.
 
 ![Comparison of FPS for each common render scale](comparison2.webp)
 
@@ -14,9 +14,9 @@ Check out [Fabrishot](https://modrinth.com/mod/fabrishot) if you also want the l
 
 # How
 
-Use the mod config to control the render scale multiplier. You can choose to increase for better antialiasing, or decrease for improved performance. This is heavily recommended for laptops with retina displays!
+Press `O` or, use the mod menu config to control the render scale multiplier. You can increase for better antialiasing, or decrease for improved performance. This is heavily recommended for laptops with retina displays!
 
-You can also force "linear" scale algorithm (similar to FXAA) in lower render scales if you want, but this may make shaders blurry, as they usually have their own antialiasing.
+You can also force "linear" scale algorithm (similar to FXAA) in lower render scales if you want. It's best to leave it as OFF if you're using shaders since they usually have their own antialiasing.
 
 There are no plans to support DLSS or FSR 2.0+. I'm looking into potential FSR 1.0 support, but I'm not sure yet.
 
@@ -26,6 +26,26 @@ There are plans for Dynamic Resolution!
 
 # Compatibility
 
-Should be compatible with any mod, including Sodium, Iris, etc. 
+Should be compatible with any mod, including Sodium, Iris, etc.
 
-If there's any bugs with the shaders, before reporting to the shader developer, please disable this mod and check again to make sure it's not us! Otherwise, please report it [here](https://github.com/Zolo101/RenderScale/issues). 
+If there are any shader bugs, before reporting to the shader developer, please disable this mod and check again to make sure it's not us! Otherwise, please report it [here](https://github.com/Zolo101/RenderScale/issues).
+
+---
+
+# Supported Versions
+
+| Minecraft       | Fabric | NeoForge | Forge |
+|-----------------|--------|----------|-------|
+| 1.21.5          | ✅ [3]  | ✅ [3]    | 🚫    |
+| 1.21.4          | ✅      | ✅        | 🚫    |
+| 1.21.2 - 1.21.3 | 🚫 [1] | 🚫       | 🚫    |
+| 1.21.0 - 1.21.1 | ✅ [3]  | ✅ [3]    | 🚫    |
+| 1.20.4 - 1.20.6 | 🚫 [1] | 🚫       | 🚫    |
+| 1.20.2 - 1.20.4 | 🚫 [2] | 🚫       | 🚫    |
+| 1.20.1          | 🚫 [2] | 🚫       | ✅     |
+
+[1] Available on [ResolutionControl++](https://modrinth.com/mod/resolution-control-plus-plus)
+
+[2] Available on [ResolutionControl+](https://modrinth.com/mod/resolution-control-plus)
+
+[3] Currently does not support Fabulous graphics
