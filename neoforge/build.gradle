@@ -34,9 +34,9 @@ neoForge {
 //        data {
 //            clientData()
 //        }
-        server {
-            server()
-        }
+//        server {
+//            server()
+//        }
     }
     mods {
         "${mod_id}" {
