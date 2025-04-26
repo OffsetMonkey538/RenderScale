@@ -8,5 +8,5 @@ public interface GICommandEncoderThing extends CommandEncoder {
                                                  int mipLevel, int destX, int destY,
                                                  int sourceX, int sourceY,
                                                  int sourceWidth, int sourceHeight,
-                                                 int destWidth, int destHeight);
+                                                 int destWidth, int destHeight, boolean isDepth);
 }

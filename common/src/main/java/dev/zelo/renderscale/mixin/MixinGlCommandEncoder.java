@@ -1,11 +1,11 @@
 package dev.zelo.renderscale.mixin;
 
-import com.jogamp.opengl.GL;
 import com.mojang.blaze3d.opengl.*;
 import com.mojang.blaze3d.textures.GpuTexture;
 import dev.zelo.renderscale.CommonClass;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
-import org.lwjgl.opengl.ARBDirectStateAccess;
+import org.lwjgl.opengl.GL11C;
+import org.lwjgl.opengl.GL30C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +28,7 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
                                                  int mipLevel, int destX, int destY,
                                                  int sourceX, int sourceY,
                                                  int sourceWidth, int sourceHeight,
-                                                 int destWidth, int destHeight) {
+                                                 int destWidth, int destHeight, boolean isDepth) {
         if (this.inRenderPass) {
             throw new IllegalStateException("Close the existing render pass before performing additional commands");
         } else if (mipLevel >= 0 && mipLevel < source.getMipLevels() && mipLevel < destination.getMipLevels()) {
@@ -39,20 +39,39 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
             } else if (source.isClosed() || destination.isClosed()) {
                 throw new IllegalStateException("Source or destination texture is closed");
             } else {
-                boolean isDepth = source.getFormat().hasDepthAspect();
                 int sourceId = ((GlTexture) source).glId();
                 int destId = ((GlTexture) destination).glId();
 
-                ARBDirectStateAccess.glNamedFramebufferTexture(this.readFbo, 36064, isDepth ? 0 : sourceId, 0);
-                ARBDirectStateAccess.glNamedFramebufferTexture(this.readFbo, 36096, isDepth ? sourceId : 0, 0);
+                // Turns out the original code required OpenGL 4.5 which kinda sucks for compatibility (macs...)
+                // the new code is OpenGL 3.0 which is way better
 
-                ARBDirectStateAccess.glNamedFramebufferTexture(this.drawFbo, 36064, isDepth ? 0 : destId, 0);
-                ARBDirectStateAccess.glNamedFramebufferTexture(this.drawFbo, 36096, isDepth ? destId : 0, 0);
+                 // TODO: Try to convert this to Minecraft's DirectStateAccess to maximise compatibility
+                // Unbind them
+                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
+                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
 
-                ARBDirectStateAccess.glBlitNamedFramebuffer(this.readFbo, this.drawFbo, sourceX, sourceY, sourceWidth, sourceHeight,
-                        destX, destY, destWidth, destHeight,
-                        isDepth ? 256 : 16384,
-                        CommonClass.getConfig().getFilter() ? GL.GL_LINEAR : GL.GL_NEAREST);
+                //  Bind and attach the source textures
+                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, this.readFbo);
+                GlStateManager._glFramebufferTexture2D(GL30C.GL_READ_FRAMEBUFFER, isDepth ? GL30C.GL_DEPTH_ATTACHMENT : GL30C.GL_COLOR_ATTACHMENT0, GL11C.GL_TEXTURE_2D, sourceId, 0);
+
+                // Bind and attach the destination texture
+                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, this.drawFbo);
+                GlStateManager._glFramebufferTexture2D(GL30C.GL_DRAW_FRAMEBUFFER, isDepth ? GL30C.GL_DEPTH_ATTACHMENT : GL30C.GL_COLOR_ATTACHMENT0, GL11C.GL_TEXTURE_2D, destId, 0);
+
+                // Resize
+                int mask = isDepth ? GL11C.GL_DEPTH_BUFFER_BIT : GL11C.GL_COLOR_BUFFER_BIT;
+                int filter = CommonClass.getConfig().getFilter() ? GL11C.GL_LINEAR : GL11C.GL_NEAREST;
+
+                // Force filter as nearest if this is a depth texture
+                if (isDepth) filter = GL11C.GL_NEAREST;
+
+                GlStateManager._glBlitFrameBuffer(sourceX, sourceY, sourceX + sourceWidth, sourceY + sourceHeight,
+                        destX, destY, destX + destWidth, destY + destHeight,
+                        mask, filter);
+
+                // Unbind them
+                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
+                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
             }
         }
     }
