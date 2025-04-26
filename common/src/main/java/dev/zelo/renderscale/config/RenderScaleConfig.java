@@ -1,6 +1,7 @@
 package dev.zelo.renderscale.config;
 
 import dev.zelo.renderscale.CommonClass;
+import dev.zelo.renderscale.compat.iris.IrisCompatibility;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -19,6 +20,7 @@ public class RenderScaleConfig implements ConfigData {
         // Change resolution upon save!
         holder.registerSaveListener((manager, data) -> {
             CommonClass.getInstance().onResolutionChanged();
+            IrisCompatibility.reloadShaders();
             return null;
         });
 
