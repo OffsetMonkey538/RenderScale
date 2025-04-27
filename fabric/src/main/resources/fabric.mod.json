@@ -38,7 +38,6 @@
     "fabric-api": "*",
     "minecraft": ["1.21", "1.21.1"],
     "java": ">=${java_version}",
-    "modmenu": "*",
     "cloth-config": "*"
   }
 }
