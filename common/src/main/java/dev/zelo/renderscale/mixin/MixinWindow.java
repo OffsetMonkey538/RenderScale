@@ -2,8 +2,8 @@ package dev.zelo.renderscale.mixin;
 
 import com.mojang.blaze3d.platform.Window;
 import dev.zelo.renderscale.CommonClass;
-import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinWindow {
     @Inject(method = "getWidth", at = @At("RETURN"), cancellable = true)
     private void a(CallbackInfoReturnable<Integer> cir) {
-        var value = scale(cir.getReturnValueI());
+        var value = renderScale$scale(cir.getReturnValueI());
         cir.setReturnValue(value);
     }
 
     @Inject(method = "getHeight", at = @At("RETURN"), cancellable = true)
     private void b(CallbackInfoReturnable<Integer> cir) {
-        var value = scale(cir.getReturnValueI());
+        var value = renderScale$scale(cir.getReturnValueI());
         cir.setReturnValue(value);
     }
 
@@ -46,10 +46,11 @@ public abstract class MixinWindow {
         }
     }
 
-    private int scale(int value) {
+    @Unique
+    private int renderScale$scale(int value) {
         if (CommonClass.getInstance() != null) {
             double scaleFactor = CommonClass.getInstance().getCurrentScaleFactor();
-            return Math.max(Mth.ceil(((double) value) * scaleFactor), 1);
+            return Math.max((int) (value * scaleFactor), 1);
         } else {
             return value;
         }

@@ -18,7 +18,7 @@ public class RenderScale implements ClientModInitializer {
 
         WorldRenderEvents.START.register(worldRenderContext -> {
             if (!CommonClass.getInstance().hasRun) {
-                CommonClass.getInstance().resizeMinecraftRenderTargetSize();
+                CommonClass.getInstance().resize(CommonClass.getInstance().renderTarget);
                 CommonClass.getInstance().hasRun = true;
             }
         });

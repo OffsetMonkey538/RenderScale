@@ -40,7 +40,7 @@ public class RenderScale {
 
     public void onWorldRenderStart(RenderLevelStageEvent event) {
         if (!CommonClass.getInstance().hasRun) {
-            CommonClass.getInstance().resizeMinecraftRenderTargetSize();
+            CommonClass.getInstance().resize(CommonClass.getInstance().renderTarget);
             CommonClass.getInstance().hasRun = true;
         }
     }

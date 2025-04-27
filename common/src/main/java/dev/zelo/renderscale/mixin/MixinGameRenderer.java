@@ -14,7 +14,7 @@ public abstract class MixinGameRenderer {
         CommonClass.getInstance().setShouldScale(true);
     }
 
-    @Inject(method = "renderLevel", at = @At(value = "RETURN"))
+    @Inject(method = "renderLevel", at = @At(value = "TAIL"))
     private void onRenderWorldEnd(CallbackInfo callbackInfo) {
         CommonClass.getInstance().setShouldScale(false);
     }

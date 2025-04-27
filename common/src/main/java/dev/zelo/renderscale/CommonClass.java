@@ -1,13 +1,11 @@
 package dev.zelo.renderscale;
 
-import com.mojang.blaze3d.pipeline.MainTarget;
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.GpuTexture;
-import com.mojang.blaze3d.textures.TextureFormat;
-import dev.zelo.renderscale.config.RenderScaleConfig;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
+import dev.zelo.renderscale.config.RenderScaleConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +19,14 @@ import java.util.Set;
 // however it will be compatible with all supported mod loaders.
 public class CommonClass {
     private static Minecraft client = Minecraft.getInstance();
-    private GpuTexture x;
+
+    // This is RenderScale's renderTarget
+    @Nullable
+    public RenderTarget renderTarget;
+
+    // This is Minecraft's renderTarget
+    @Nullable
+    public RenderTarget clientRenderTarget;
 
     private Set<RenderTarget> minecraftRenderTargets;
 
@@ -72,13 +77,18 @@ public class CommonClass {
     }
 
     public void updateRenderTargetSize() {
-        resize(client.levelRenderer.entityOutlineTarget());
+        resize(renderTarget);
+//        resize(client.levelRenderer.entityOutlineTarget());
         resizeMinecraftRenderTargetSize();
     }
 
     public void resizeMinecraftRenderTargetSize() {
         initMinecraftRenderTargets();
-        minecraftRenderTargets.forEach(this::resize);
+//        minecraftRenderTargets.forEach(this::resize);
+    }
+
+    public void setClientRenderTarget(RenderTarget renderTarget) {
+        client.mainRenderTarget = renderTarget;
     }
 
     public void setShouldScale(boolean shouldScale) {
@@ -86,33 +96,42 @@ public class CommonClass {
         int width = window.getWidth();
         int height = window.getHeight();
 
-        double scale = getConfig().scale;
+        int scaledWidth = Math.clamp(width, 1, 65536);
+        int scaledHeight = Math.clamp(height, 1, 65536);
 
-        RenderTarget rt = client.getMainRenderTarget();
+        if (renderTarget == null) {
+            renderTarget = new TextureTarget("RenderScale", scaledWidth, scaledHeight, true);
+        }
+
+        if (clientRenderTarget == null) {
+            clientRenderTarget = client.getMainRenderTarget();
+        }
 
         if (shouldScale) {
-            rt.resize((int) (width * scale), (int) (height * scale));
-            x = RenderSystem.getDevice().createTexture("RenderScale Swap", TextureFormat.RGBA8, (int) (width * scale), (int) (height * scale), 1);
+            setClientRenderTarget(renderTarget);
         } else {
-            RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(
-                    rt.getColorTexture(), x,
-                    0, 0, 0, 0, 0,
-                    (int) (width * scale), (int) (height * scale)
-            );
+            try {
+                setClientRenderTarget(clientRenderTarget);
 
-            rt.resize(width, height);
-
-            ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).renderScale$copyAndResizeTexture(
-                    x, rt.getColorTexture(),
-                    0, 0, 0, 0, 0,
-                    (int) (width * scale), (int) (height * scale),
-                    width, height
-            );
-
-            x.close();
+                ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).renderScale$copyAndResizeTexture(
+                        renderTarget.getColorTexture(), clientRenderTarget.getColorTexture(),
+                        0, 0, 0, 0, 0,
+                        renderTarget.width, renderTarget.height,
+                        width, height, false
+                );
+                ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).renderScale$copyAndResizeTexture(
+                        renderTarget.getDepthTexture(), clientRenderTarget.getDepthTexture(),
+                        0, 0, 0, 0, 0,
+                        renderTarget.width, renderTarget.height,
+                        width, height, true
+                );
+            } catch (Exception e) {
+                Constants.LOG.error("Error copying texture", e);
+            }
         }
     }
 
+    // Takes into account shouldScale
     public double getCurrentScaleFactor() {
         return shouldScale ? getConfig().scale : 1;
     }
@@ -129,7 +148,12 @@ public class CommonClass {
         shouldScale = true;
 
         Window window = client.getWindow();
-        renderTarget.resize(window.getWidth(), window.getHeight());
+        int width = window.getWidth();
+        int height = window.getHeight();
+
+        int scaledWidth = Math.clamp(width, 1, 65536);
+        int scaledHeight = Math.clamp(height, 1, 65536);
+        renderTarget.resize(scaledWidth, scaledHeight);
 
         shouldScale = prev;
     }

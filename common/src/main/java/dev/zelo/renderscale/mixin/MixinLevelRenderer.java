@@ -4,6 +4,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import dev.zelo.renderscale.CommonClass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -13,12 +14,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinLevelRenderer {
     @Shadow private RenderTarget entityOutlineTarget;
 
-    // The NEW and IMPROVED fix for the entity outline shader!
-    @Redirect(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getMainRenderTarget()Lcom/mojang/blaze3d/pipeline/RenderTarget;"))
-    private RenderTarget redirectGetMainRenderTarget(Minecraft instance) {
-        entityOutlineTarget.width = (int) (instance.getWindow().getWidth() * CommonClass.getConfig().scale);
-        entityOutlineTarget.height = (int) (instance.getWindow().getHeight() * CommonClass.getConfig().scale);
-        return entityOutlineTarget;
+    @Shadow @Final private Minecraft minecraft;
+
+    @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;importExternal(Ljava/lang/String;Ljava/lang/Object;)Lcom/mojang/blaze3d/resource/ResourceHandle;"))
+    private void onRenderWorldBegin(CallbackInfo callbackInfo) {
+        if (this.entityOutlineTarget != null) {
+            Minecraft instance = this.minecraft;
+
+            double s = CommonClass.getConfig().scale;
+
+            entityOutlineTarget.width = (int) (instance.getWindow().getWidth() * s);
+            entityOutlineTarget.height = (int) (instance.getWindow().getHeight() * s);
+        }
     }
 
     @Inject(method = "resize", at = @At("RETURN"))
