@@ -5,11 +5,16 @@ plugins {
 
 repositories {
     maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://api.modrinth.com/maven" }
 }
 
 dependencies {
     // config API for mod menu
     api("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+
+
+    // Iris compatibility
+    compileOnly "maven.modrinth:iris:${iris_version}+${minecraft_version}-neoforge"
 }
 
 neoForge {
