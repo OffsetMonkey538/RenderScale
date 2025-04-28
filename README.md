@@ -2,30 +2,6 @@
 
 RenderScale allows you to change Minecraft's render resolution **separately** from the HUD elements.
 
-This is a fork of [ResolutionControl++](https://github.com/ModLabsCC/Resolution-Control) for 1.21.4, with added support for NeoForge.
+This is a fork of [ResolutionControl++](https://github.com/ModLabsCC/Resolution-Control), with added support for NeoForge.
 
-![Comparison of FPS for each common render scale](comparison2.webp)
-
-![Comparison of anti-aliasing for 1x and 2x render scales](ssma2.png)
-
-Check out [Fabrishot](https://modrinth.com/mod/fabrishot) if you also want the large screenshot feature that was in ResolutionControl.
-
----
-
-# How
-
-Use the mod config to control the render scale multiplier. You can choose to increase for better antialiasing, or decrease for improved performance. This is heavily recommended for laptops with retina displays!
-
-You can also force "linear" scale algorithm (similar to FXAA) in lower render scales if you want, but this may make shaders blurry, as they usually have their own antialiasing.
-
-There are no plans to support DLSS or FSR 2.0+. I'm looking into potential FSR 1.0 support, but I'm not sure yet.
-
-There are plans for Dynamic Resolution!
-
----
-
-# Compatibility
-
-Should be compatible with any mod, including Sodium, Iris, etc. 
-
-If there's any bugs with the shaders, before reporting to the shader developer, please disable this mod and check again to make sure it's not us! Otherwise, please report it [here](https://github.com/Zolo101/RenderScale/issues). 
+See the [Modrinth page](https://modrinth.com/mod/renderscale) for more information.
