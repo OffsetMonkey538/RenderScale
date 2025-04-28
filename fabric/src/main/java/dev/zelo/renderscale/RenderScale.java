@@ -18,7 +18,7 @@ public class RenderScale implements ClientModInitializer {
 
         WorldRenderEvents.START.register(worldRenderContext -> {
             if (!CommonClass.getInstance().hasRun) {
-                CommonClass.getInstance().resize(CommonClass.getInstance().renderTarget);
+                CommonClass.getInstance().resizeRenderTarget();
                 CommonClass.getInstance().hasRun = true;
             }
         });

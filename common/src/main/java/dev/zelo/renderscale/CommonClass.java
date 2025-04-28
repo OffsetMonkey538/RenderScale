@@ -10,9 +10,6 @@ import me.shedaniel.autoconfig.ConfigHolder;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Set;
-
 // This class is part of the common project meaning it is shared between all supported loaders. Code written here can only
 // import and access the vanilla codebase, libraries used by vanilla, and optionally third party libraries that provide
 // common compatible binaries. This means common code can not directly use loader specific concepts such as Forge events
@@ -27,8 +24,6 @@ public class CommonClass {
     // This is Minecraft's renderTarget
     @Nullable
     public RenderTarget clientRenderTarget;
-
-    private Set<RenderTarget> minecraftRenderTargets;
 
     private static CommonClass instance;
     private boolean shouldScale = false;
@@ -55,17 +50,6 @@ public class CommonClass {
         return CONFIG.getConfig();
     }
 
-    public void initMinecraftRenderTargets() {
-        if (minecraftRenderTargets != null) {
-            minecraftRenderTargets.clear();
-        } else {
-            minecraftRenderTargets = new HashSet<>();
-        }
-
-        minecraftRenderTargets.add(client.levelRenderer.entityOutlineTarget());
-        minecraftRenderTargets.remove(null);
-    }
-
     public void onResolutionChanged() {
         if (getWindow() == null) return;
         Constants.LOG.info("Size changed to {}x{} {}x{} {}x{}",
@@ -73,18 +57,7 @@ public class CommonClass {
                 getWindow().getScreenWidth(), getWindow().getScreenHeight(),
                 getWindow().getGuiScaledWidth(), getWindow().getGuiScaledHeight());
 
-        updateRenderTargetSize();
-    }
-
-    public void updateRenderTargetSize() {
-        resize(renderTarget);
-//        resize(client.levelRenderer.entityOutlineTarget());
-        resizeMinecraftRenderTargetSize();
-    }
-
-    public void resizeMinecraftRenderTargetSize() {
-        initMinecraftRenderTargets();
-//        minecraftRenderTargets.forEach(this::resize);
+        resizeRenderTarget();
     }
 
     public void setClientRenderTarget(RenderTarget renderTarget) {
@@ -133,7 +106,7 @@ public class CommonClass {
 
     // Takes into account shouldScale
     public double getCurrentScaleFactor() {
-        return shouldScale ? getConfig().scale : 1;
+        return shouldScale ? getConfig().getScale() : 1;
     }
 
     @Nullable
@@ -141,7 +114,7 @@ public class CommonClass {
         return client.getWindow();
     }
 
-    public void resize(@Nullable RenderTarget renderTarget) {
+    public void resizeRenderTarget() {
         if (renderTarget == null) return;
 
         boolean prev = shouldScale;
