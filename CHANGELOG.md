@@ -1,9 +1,10 @@
 # 1.3
 ## Changes
 - Allow an alternate scaling factor when shaders are enabled (#13)
+- "Mod Menu" is no longer a requirement for this mod
 
 ## Fixes
-- Fix performance issues when FPS is >200 (#16)
+- Fix performance issues when FPS is 200+ (#16)
 - Fix compatibility with macOS (#15)
 - Improved support for Distant Horizons with Shaders (#20)
   - This one isn't fully fixed, check out [📌 1.21.5 Distant Horizons with Shaders Infomation](https://github.com/Zolo101/RenderScale/issues/26) if you're having issues.
