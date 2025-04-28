@@ -21,16 +21,10 @@ public abstract class MixinLevelRenderer {
         if (this.entityOutlineTarget != null) {
             Minecraft instance = this.minecraft;
 
-            double s = CommonClass.getConfig().scale;
+            double s = CommonClass.getConfig().getScale();
 
             entityOutlineTarget.width = (int) (instance.getWindow().getWidth() * s);
             entityOutlineTarget.height = (int) (instance.getWindow().getHeight() * s);
         }
-    }
-
-    @Inject(method = "resize", at = @At("RETURN"))
-    private void onOnResized(CallbackInfo ci) {
-        if (entityOutlineTarget == null) return;
-        CommonClass.getInstance().resizeMinecraftRenderTargetSize();
     }
 }
