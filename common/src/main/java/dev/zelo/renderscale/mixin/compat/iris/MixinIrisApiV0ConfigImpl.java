@@ -14,6 +14,6 @@ public abstract class MixinIrisApiV0ConfigImpl {
     @Inject(method = "setShadersEnabledAndApply", at = @At("TAIL"), remap = false)
     private void setShadersEnabledAndApply(CallbackInfo ci) {
         // This is for the irisScale override setting
-        CommonClass.getInstance().resizeRenderTarget();
+        CommonClass.getInstance().resizeMinecraftRenderTargetSize();
     }
 }

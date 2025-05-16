@@ -111,7 +111,7 @@ public class CommonClass {
     }
 
     public double getCurrentScaleFactor() {
-        return shouldScale ? getConfig().scale : 1;
+        return shouldScale ? CommonClass.getConfig().getScale() : 1;
     }
 
     private Window getWindow() {
