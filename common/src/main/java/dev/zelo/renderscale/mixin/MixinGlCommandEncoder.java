@@ -1,9 +1,11 @@
 package dev.zelo.renderscale.mixin;
 
 import com.mojang.blaze3d.opengl.*;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import dev.zelo.renderscale.CommonClass;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11C;
 import org.lwjgl.opengl.GL30C;
 import org.spongepowered.asm.mixin.Final;
@@ -22,6 +24,10 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
     @Shadow
     @Final
     private int drawFbo;
+
+    @Shadow
+    @Final
+    private GlDevice device;
 
     @Unique
     public void renderScale$copyAndResizeTexture(GpuTexture source, GpuTexture destination,
@@ -42,13 +48,16 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
                 int sourceId = ((GlTexture) source).glId();
                 int destId = ((GlTexture) destination).glId();
 
+                MixinDirectStateAccess dsa = ((MixinDirectStateAccess) device.directStateAccess());
+
                 // Turns out the original code required OpenGL 4.5 which kinda sucks for compatibility (macs...)
                 // the new code is OpenGL 3.0 which is way better
 
                  // TODO: Try to convert this to Minecraft's DirectStateAccess to maximise compatibility
                 // Unbind them
-                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
-                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
+//                device.directStateAccess().bindFrameBufferTextures(GL30C.GL_READ_FRAMEBUFFER, 0);
+//                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
+//                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
 
                 //  Bind and attach the source textures
                 GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, this.readFbo);
@@ -65,13 +74,17 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
                 // Force filter as nearest if this is a depth texture
                 if (isDepth) filter = GL11C.GL_NEAREST;
 
-                GlStateManager._glBlitFrameBuffer(sourceX, sourceY, sourceX + sourceWidth, sourceY + sourceHeight,
+//                dsa.invokeBindFrameBufferTextures(this.readFbo, sourceId, destId, 0, GL30C.GL_READ_FRAMEBUFFER, isDepth);
+                dsa.invokeBlitFrameBuffers(this.readFbo, this.drawFbo, sourceX, sourceY, sourceX + sourceWidth, sourceY + sourceHeight,
                         destX, destY, destX + destWidth, destY + destHeight,
                         mask, filter);
+//                GlStateManager._glBlitFrameBuffer(sourceX, sourceY, sourceX + sourceWidth, sourceY + sourceHeight,
+//                        destX, destY, destX + destWidth, destY + destHeight,
+//                        mask, filter);
 
                 // Unbind them
-                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
-                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
+//                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
+//                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
             }
         }
     }
