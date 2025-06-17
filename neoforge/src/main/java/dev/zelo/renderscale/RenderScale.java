@@ -39,9 +39,11 @@ public class RenderScale {
     }
 
     public void onWorldRenderStart(RenderLevelStageEvent event) {
-        if (!CommonClass.getInstance().hasRun) {
-            CommonClass.getInstance().resizeRenderTarget();
-            CommonClass.getInstance().hasRun = true;
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
+            if (!CommonClass.getInstance().hasRun) {
+                CommonClass.getInstance().resizeRenderTarget();
+                CommonClass.getInstance().hasRun = true;
+            }
         }
     }
 

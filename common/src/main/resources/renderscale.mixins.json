@@ -5,17 +5,17 @@
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
   "client": [
+    "MixinDirectStateAccess",
     "MixinGameRenderer",
     "MixinGlCommandEncoder",
     "MixinLevelRenderer",
-    "MixinWindow",
-    "MixinDirectStateAccess"
+    "MixinWindow"
   ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "compat.iris.MixinIrisApiV0ConfigImpl"
+    "compat.iris.MixinIris"
   ]
 }
