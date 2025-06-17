@@ -1,3 +1,9 @@
+# 1.3.1
+## Fixes
+- Fix alternate scaling factor not changing when using the reload keybind ([#13](https://github.com/Zolo101/RenderScale/issues/13))
+- Fix UI artifacts with Nvidia GPUs ([#29](https://github.com/Zolo101/RenderScale/issues/29))
+- Fix settings keybind not showing up in NeoForge version
+
 # 1.3
 ## Changes
 - Allow an alternate scaling factor when shaders are enabled (#13)
