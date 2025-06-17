@@ -73,11 +73,12 @@ public class RenderScale {
         public static void onClientSetup(FMLClientSetupEvent event) {
             CommonClass.init(Minecraft.getInstance());
         }
+
+        @SubscribeEvent
+        public static void registerBindings(RegisterKeyMappingsEvent event) {
+            event.register(keyBinding);
+        }
     }
 
-    @SubscribeEvent
-    public void registerBindings(RegisterKeyMappingsEvent event) {
-        event.register(keyBinding);
-    }
 }
 
