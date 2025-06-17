@@ -29,6 +29,8 @@ public class RenderScale {
         CommonClass.init();
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, (container, screen) -> RenderScale.getConfigScreen(screen));
 
+        eventBus.register(this);
+
         NeoForge.EVENT_BUS.addListener(this::onWorldRenderStart);
         NeoForge.EVENT_BUS.addListener(this::onClientTickEnd);
         NeoForge.EVENT_BUS.addListener(this::onDatapackReload);
@@ -39,7 +41,7 @@ public class RenderScale {
     }
 
     public void onWorldRenderStart(RenderLevelStageEvent event) {
-        if (!CommonClass.getInstance().hasRun) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL && !CommonClass.getInstance().hasRun) {
             CommonClass.getInstance().resizeMinecraftRenderTargetSize();
             CommonClass.getInstance().hasRun = true;
         }

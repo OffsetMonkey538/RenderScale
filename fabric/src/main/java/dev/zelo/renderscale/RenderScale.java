@@ -32,6 +32,5 @@ public class RenderScale implements ClientModInitializer {
                 minecraft.setScreen(AutoConfig.getConfigScreen(RenderScaleConfig.class, minecraft.screen).get());
             }
         });
-
     }
 }

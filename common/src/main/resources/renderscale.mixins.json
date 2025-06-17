@@ -6,16 +6,16 @@
   "compatibilityLevel": "JAVA_18",
   "client": [
     "MixinGameRenderer",
-    "MixinWindow",
     "MixinLevelRenderer",
-    "MixinRenderTarget",
-    "MixinPostChain"
+    "MixinWindow",
+    "MixinPostChain",
+    "MixinRenderTarget"
   ],
   "server": [],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "compat.iris.MixinIrisApiV0ConfigImpl"
+    "compat.iris.MixinIris"
   ]
 }
