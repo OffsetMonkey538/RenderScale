@@ -1,11 +1,9 @@
 package dev.zelo.renderscale.mixin;
 
 import com.mojang.blaze3d.opengl.*;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import dev.zelo.renderscale.CommonClass;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11C;
 import org.lwjgl.opengl.GL30C;
 import org.spongepowered.asm.mixin.Final;
@@ -50,15 +48,6 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
 
                 MixinDirectStateAccess dsa = ((MixinDirectStateAccess) device.directStateAccess());
 
-                // Turns out the original code required OpenGL 4.5 which kinda sucks for compatibility (macs...)
-                // the new code is OpenGL 3.0 which is way better
-
-                 // TODO: Try to convert this to Minecraft's DirectStateAccess to maximise compatibility
-                // Unbind them
-//                device.directStateAccess().bindFrameBufferTextures(GL30C.GL_READ_FRAMEBUFFER, 0);
-//                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
-//                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
-
                 //  Bind and attach the source textures
                 GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, this.readFbo);
                 GlStateManager._glFramebufferTexture2D(GL30C.GL_READ_FRAMEBUFFER, isDepth ? GL30C.GL_DEPTH_ATTACHMENT : GL30C.GL_COLOR_ATTACHMENT0, GL11C.GL_TEXTURE_2D, sourceId, 0);
@@ -74,17 +63,12 @@ public abstract class MixinGlCommandEncoder implements GICommandEncoderThing {
                 // Force filter as nearest if this is a depth texture
                 if (isDepth) filter = GL11C.GL_NEAREST;
 
+                // Using Minecraft's DSA stops the weird UI artifacts
+                // (Ultimately, it would be best if they brought back the actual function, so I don't need to use direct methods)
 //                dsa.invokeBindFrameBufferTextures(this.readFbo, sourceId, destId, 0, GL30C.GL_READ_FRAMEBUFFER, isDepth);
                 dsa.invokeBlitFrameBuffers(this.readFbo, this.drawFbo, sourceX, sourceY, sourceX + sourceWidth, sourceY + sourceHeight,
                         destX, destY, destX + destWidth, destY + destHeight,
                         mask, filter);
-//                GlStateManager._glBlitFrameBuffer(sourceX, sourceY, sourceX + sourceWidth, sourceY + sourceHeight,
-//                        destX, destY, destX + destWidth, destY + destHeight,
-//                        mask, filter);
-
-                // Unbind them
-//                GlStateManager._glBindFramebuffer(GL30C.GL_READ_FRAMEBUFFER, 0);
-//                GlStateManager._glBindFramebuffer(GL30C.GL_DRAW_FRAMEBUFFER, 0);
             }
         }
     }
