@@ -28,7 +28,7 @@ There are plans for Dynamic Resolution!
 
 Aims to be compatible with any mod, including Sodium, Iris, etc. You can report any issues [here](https://github.com/Zolo101/RenderScale/issues), or on my [discord](https://discord.com/invite/YVuuF9KB5j). Make sure to include your MC logs!
 
-**1.21.5 Note**: There may be some issues using Distant Horizons with shaders. Check out [📌 1.21.5 Distant Horizons with Shaders Infomation](https://github.com/Zolo101/RenderScale/issues/26) for potential fixes.
+**1.21.5+ Note**: There may be some issues using Distant Horizons with shaders. Check out [📌 1.21.5 Distant Horizons with Shaders Infomation](https://github.com/Zolo101/RenderScale/issues/26) for potential fixes.
 
 ---
 
@@ -36,8 +36,7 @@ Aims to be compatible with any mod, including Sodium, Iris, etc. You can report 
 
 | Minecraft       | Fabric | NeoForge | Forge |
 |-----------------|--------|----------|-------|
-| 1.21.5          | ✅      | ✅        | 🚫    |
-| 1.21.4          | ✅      | ✅        | 🚫    |
+| 1.21.4+         | ✅      | ✅        | 🚫    |
 | 1.21.2 - 1.21.3 | 🚫 [1] | 🚫       | 🚫    |
 | 1.21.0 - 1.21.1 | ✅ [3]  | ✅ [3]    | 🚫    |
 | 1.20.4 - 1.20.6 | 🚫 [1] | 🚫       | 🚫    |

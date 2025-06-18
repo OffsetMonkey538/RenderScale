@@ -25,10 +25,10 @@ public abstract class MixinWindow {
     }
 
     @Inject(method = "getGuiScale", at = @At("RETURN"), cancellable = true)
-    private void c(CallbackInfoReturnable<Double> cir) {
+    private void c(CallbackInfoReturnable<Integer> cir) {
         // It's NeoForges' fault for this null check
         if (CommonClass.getInstance() != null) {
-            cir.setReturnValue(cir.getReturnValueD() * (CommonClass.getInstance().getCurrentScaleFactor()));
+            cir.setReturnValue((int) (cir.getReturnValueI() * (CommonClass.getInstance().getCurrentScaleFactor())));
         }
     }
 
