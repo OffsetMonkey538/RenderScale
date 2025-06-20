@@ -1,3 +1,7 @@
+# 1.3.2
+## Fixes
+- Fix mod menu support ([#36](https://github.com/Zolo101/RenderScale/issues/36))
+
 # 1.3.1
 ## Fixes
 - Fix alternate scaling factor not changing when using the reload keybind ([#13](https://github.com/Zolo101/RenderScale/issues/13))
