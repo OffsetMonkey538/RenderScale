@@ -17,6 +17,14 @@
     "sources": "https://github.com/Zolo101/RenderScale",
     "issues": "https://github.com/Zolo101/RenderScale/issues"
   },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/YVuuF9KB5j",
+        "modmenu.modrinth" : "https://modrinth.com/mod/renderscale"
+      }
+    }
+  },
   "license": "${license}",
   "icon": "${mod_id}.png",
   "environment": "client",
