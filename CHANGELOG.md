@@ -1,3 +1,7 @@
+# 1.3.3
+## Fixes
+- Support 1.21.7
+
 # 1.3.2
 ## Fixes
 - Fix mod menu support ([#36](https://github.com/Zolo101/RenderScale/issues/36))
