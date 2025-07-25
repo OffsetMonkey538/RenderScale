@@ -27,7 +27,8 @@ dependencies {
     }
 
     // For iris related compatibility
-    modCompileOnly "maven.modrinth:iris:${iris_version}+${minecraft_version}-fabric"
+//    modCompileOnly "maven.modrinth:iris:${iris_version}+${minecraft_version}-fabric"
+    modCompileOnly "maven.modrinth:iris:${iris_version}+1.21.7-fabric"
 }
 
 loom {
