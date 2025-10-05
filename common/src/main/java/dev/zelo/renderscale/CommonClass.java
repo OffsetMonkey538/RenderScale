@@ -4,6 +4,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.GpuTexture;
 import dev.zelo.renderscale.accessors.GICommandEncoderThing;
 import dev.zelo.renderscale.config.RenderScaleConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -85,6 +86,10 @@ public class CommonClass {
         } else {
             try {
                 setClientRenderTarget(clientRenderTarget);
+
+//                ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).copyTextureToTexture(
+//                ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).presentTexture(
+//                        (GpuTextureView)  renderTarget.getColorTexture());
 
                 ((GICommandEncoderThing) RenderSystem.getDevice().createCommandEncoder()).renderScale$copyAndResizeTexture(
                         renderTarget.getColorTexture(), clientRenderTarget.getColorTexture(),

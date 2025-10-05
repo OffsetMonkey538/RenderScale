@@ -22,13 +22,8 @@ public interface MixinDirectStateAccess {
             int filter
     );
 
-//    @Invoker("bindFrameBufferTextures")
-//    void invokeBindFrameBufferTextures(
-//            int frameBuffer,
-//            int colorTexture,
-//            int depthTexture,
-//            int level,
-//            int target,
-//            boolean useStencil
-//    );
+    @Invoker("bindFrameBufferTextures")
+    void invokeBindFrameBufferTextures(
+            int frameBuffer, int colorTexture, int depthTexture, int level, int target
+    );
 }

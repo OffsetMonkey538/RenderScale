@@ -16,6 +16,14 @@ public abstract class MixinLevelRenderer {
 
     @Shadow @Final private Minecraft minecraft;
 
+    @Inject(method = "renderLevel", at = @At(value = "HEAD"))
+    private void onRenderWorldBeginHead(CallbackInfo callbackInfo) {
+        if (!CommonClass.getInstance().hasRun) {
+            CommonClass.getInstance().resizeRenderTarget();
+            CommonClass.getInstance().hasRun = true;
+        }
+    }
+
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/framegraph/FrameGraphBuilder;importExternal(Ljava/lang/String;Ljava/lang/Object;)Lcom/mojang/blaze3d/resource/ResourceHandle;"))
     private void onRenderWorldBegin(CallbackInfo callbackInfo) {
         if (this.entityOutlineTarget != null) {
