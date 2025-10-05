@@ -1,6 +1,10 @@
+# 1.3.4
+## Fixes
+- Support 1.21.9
+
 # 1.3.3
 ## Fixes
-- Support 1.21.7
+- Support 1.21.7 and 1.21.8
 
 # 1.3.2
 ## Fixes
