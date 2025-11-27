@@ -17,18 +17,18 @@ public class MixinPostChain {
     @Shadow @Final private String name;
 
     @Unique
-    private double renderResControl$inverseScale() {
-        return name.equals("minecraft:shaders/post/entity_outline.json") ? 1 / CommonClass.getConfig().scale : 1;
+    private double renderScale$inverseScale() {
+        return name.equals("minecraft:shaders/post/entity_outline.json") ? 1 / CommonClass.getConfig().getScale() : 1;
     }
 
     @Redirect(method = "resize", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/pipeline/RenderTarget;resize(IIZ)V"))
     private void a(RenderTarget instance, int width, int height, boolean clearError) {
-        instance.resize((int) (width / renderResControl$inverseScale()), (int) (height / renderResControl$inverseScale()), clearError);
+        instance.resize((int) (width / renderScale$inverseScale()), (int) (height / renderScale$inverseScale()), clearError);
     }
 
     @Inject(method = "updateOrthoMatrix", at = @At("TAIL"))
     private void onUpdateOrthoMatrix(CallbackInfo ci) {
-        this.shaderOrthoMatrix = this.shaderOrthoMatrix.scale((float) renderResControl$inverseScale(), (float) renderResControl$inverseScale(), 1.0F);
+        this.shaderOrthoMatrix = this.shaderOrthoMatrix.scale((float) renderScale$inverseScale(), (float) renderScale$inverseScale(), 1.0F);
     }
 
     // TODO: @ModifyArgs DOES NOT WORK!! WHY?

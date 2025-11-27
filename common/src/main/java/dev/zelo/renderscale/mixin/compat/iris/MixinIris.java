@@ -11,6 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinIris {
     @Inject(method = "reload", at = @At("TAIL"), remap = false)
     private static void reload(CallbackInfo ci) {
-        CommonClass.getInstance().resizeMinecraftRenderTargetSize();
+        CommonClass.getInstance().onResolutionChanged();
     }
 }
