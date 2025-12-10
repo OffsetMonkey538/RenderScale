@@ -106,7 +106,7 @@ public class CommonClass {
             client.getMainRenderTarget().bindWrite(true);
 
             // TODO: Support fabulous graphics. Right now disableBlend = true shows the other passes but messes up the main target
-            renderTarget.blitToScreen(window.getWidth(), window.getHeight(), Minecraft.ON_OSX);
+            renderTarget.blitToScreen(window.getWidth(), window.getHeight(), false);
         }
     }
 
