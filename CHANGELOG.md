@@ -1,3 +1,11 @@
+# 1.3.6
+## Fixes
+- Support 1.21.11
+
+# 1.3.5
+## Fixes
+- Fix rendering issues with MacOS on 1.21.1 ([#14](https://github.com/Zolo101/RenderScale/issues/14)), Thanks to @SomeoneIsWorking for finding a solution to this!
+
 # 1.3.4
 ## Fixes
 - Support 1.21.9 and 1.21.10
