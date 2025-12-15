@@ -2,10 +2,11 @@ package dev.zelo.renderscale;
 
 import dev.zelo.renderscale.config.RenderScaleConfig;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -24,8 +25,9 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
 public class RenderScale {
+    private static final KeyMapping.Category category = new KeyMapping.Category(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "category"));
     // TODO: Consider using Lazy? (https://docs.neoforged.net/docs/misc/keymappings/#checking-a-keymapping)
-    private static final KeyMapping keyBinding = new KeyMapping("key.renderscale.options", GLFW.GLFW_KEY_O, "key.renderscale.category");
+    private static final KeyMapping keyBinding = new KeyMapping("key.renderscale.options", GLFW.GLFW_KEY_O, category);
 
     public RenderScale(IEventBus eventBus, ModContainer modContainer) {
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, (container, screen) -> RenderScale.getConfigScreen(screen));
@@ -35,15 +37,13 @@ public class RenderScale {
     }
 
     public static Screen getConfigScreen(Screen parent) {
-        return AutoConfig.getConfigScreen(RenderScaleConfig.class, parent).get();
+        return AutoConfigClient.getConfigScreen(RenderScaleConfig.class, parent).get();
     }
 
-    public void onWorldRenderStart(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
-            if (!CommonClass.getInstance().hasRun) {
-                CommonClass.getInstance().resizeRenderTarget();
-                CommonClass.getInstance().hasRun = true;
-            }
+    public void onWorldRenderStart(RenderLevelStageEvent.AfterLevel event) {
+        if (!CommonClass.getInstance().hasRun) {
+            CommonClass.getInstance().resizeRenderTarget();
+            CommonClass.getInstance().hasRun = true;
         }
     }
 
@@ -53,7 +53,7 @@ public class RenderScale {
         }
 
         while (keyBinding.consumeClick()) {
-            Minecraft.getInstance().setScreen(AutoConfig.getConfigScreen(RenderScaleConfig.class, Minecraft.getInstance().screen).get());
+            Minecraft.getInstance().setScreen(AutoConfigClient.getConfigScreen(RenderScaleConfig.class, Minecraft.getInstance().screen).get());
         }
     }
 
@@ -61,11 +61,11 @@ public class RenderScale {
         AutoConfig.getConfigHolder(RenderScaleConfig.class).load();
     }
 
-    @EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
     public class EventHandler {
         @SubscribeEvent
         public static void registerReloadManager(AddClientReloadListenersEvent event) {
-            event.addListener(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "load_config"),
+            event.addListener(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "load_config"),
                     (ResourceManagerReloadListener) c -> RenderScale.onDatapackReload());
         }
 
